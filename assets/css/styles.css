@@ -1,0 +1,15 @@
+html, body {
+    height: 100%;
+}
+.container {
+    height: 100%;
+}
+#game-container {
+    height: 80%;
+}
+
+#start-button {
+    position: relative;
+    margin: auto;
+    text-align: center;
+}
