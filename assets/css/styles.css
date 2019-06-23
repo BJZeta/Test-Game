@@ -5,11 +5,20 @@ html, body {
     height: 100%;
 }
 #game-container {
-    height: 80%;
+    height: 60%;
 }
 
-#start-button {
+#start-button, #button-container {
     position: relative;
     margin: auto;
     text-align: center;
+}
+
+.start-button {
+    width: 90px
+}
+
+.container {
+    /* background-image: url(/images/papyrus-dark.png); */
+    /* background-repeat: repeat; */
 }
