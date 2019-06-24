@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $("#start-button").on("click", function () {
         godzillaGame();
+        clockFunc();
     })
     var number = 0;
     var wins = 0;
@@ -79,57 +80,64 @@ $(document).ready(function () {
 
     ]
 
-    var godzillaGame = function () {
-        $("#game-container").empty();
-        var currentQuestion = questionsArr[number];
-        var questionDiv = $("<div id=current-question><div>");
-        var ques = $("<h2>");
-        var answerRow2 = $("<div class=col-md-12></div>");
-        var answerScreen = $("<h2>");
-        var answerRow1 = $("<div class=col-md-12></div>");
-        var next = $("<button>");
-        var gifDiv = $("<div id=gif-div></div>");
-        var answerGif = $("<img id=gif>");
-
-        var clockHeading = $("<h2 id=clock-heading>");
-        var gameStarted = false;
-        var clock = 21;
-        var intervalId;
-        var clockFunc = function () {
-            if(!gameStarted){
+    var clockHeading = $("<h2 id=clock-heading>");
+    var gameStarted = false;
+    var clock = 21;
+    var intervalId;
+    var clockFunc = function () {
+        if (gameStarted == false) {
             gameStarted = true;
             clearInterval(intervalId);
             intervalId = setInterval(decrement, 1000);
-            }
         }
 
+    }
 
-        var decrement = function () {
-            clock--;
-            clockHeading.text(clock);
-            $("#game-container").append(clockHeading);
-            if (clock === 0) {
-                $("#game-container").empty();
-                $("#button-container").empty();
-                answerRow1.prepend("<h2 class=text-danger>WRONG</h2>");
-                $("#game-container").append(answerRow1);
-                $("#game-container").append(answerRow2);
-                $("#button-container").append(next);
-                number++;
-                loses++;
-                stopclock();
-                
-            }
+
+    var decrement = function () {
+        clock--;
+        clockHeading.text(clock);
+        $("#game-container").append(clockHeading);
+        if (clock === 0) {
+            $("#game-container").empty();
+            $("#button-container").empty();
+            answerRow1.empty();
+            answerRow1.append("<h2 class=text-danger>Times Up</h2>");
+            $("#game-container").append(answerRow1);
+            $("#game-container").append(answerRow2);
+            $("#game-container").append(gifDiv);
+            $("#button-container").append(next);
+            number++;
+            loses++;
+            stopclock();
+
         }
+    }
 
-        var stopclock = function () {
-            clearInterval(intervalId);
-        }
+    var stopclock = function () {
+        gameStarted = false;
+        clearInterval(intervalId);
+        reset();
+    }
 
-        var reset = function () {
-            clock = 21
-        }
+    var reset = function () {
+        clock = 21
+    }
+    var currentQuestion;
+    var questionDiv = $("<div id=current-question><div>");
+    var ques = $("<h2>");
+    var answerRow2 = $("<div class=col-md-12></div>");
+    var answerScreen = $("<h2>");
+    var answerRow1 = $("<div class=col-md-12></div>");
+    var next = $("<button>");
+    var gifDiv = $("<div id=gif-div></div>");
+    var answerGif = $("<img id=gif>");
 
+
+    var godzillaGame = function () {
+        $("#game-container").empty();
+
+        currentQuestion = questionsArr[number]
         answerGif.attr("src", currentQuestion.gif);
         answerGif.attr("alt", "");
         gifDiv.append(answerGif);
@@ -139,7 +147,6 @@ $(document).ready(function () {
         ques.text(currentQuestion.question);
         questionDiv.html(ques);
         $("#game-container").append(questionDiv);
-        clockFunc();
         for (var i = 0; i < currentQuestion.answers.length; i++) {
             var choices = $("<button id=#button>");
             choices.text(currentQuestion.answers[i]);
@@ -151,7 +158,8 @@ $(document).ready(function () {
                     console.log("correct");
                     $("#game-container").empty();
                     $("#button-container").empty();
-                    answerRow1.prepend("<h2 class=text-success>CORRECT</h2>");
+                    answerRow1.empty();
+                    answerRow1.append("<h2 class=text-success>CORRECT</h2>");
                     $("#game-container").append(answerRow1);
                     $("#game-container").append(answerRow2);
                     $("#game-container").append(gifDiv);
@@ -159,21 +167,25 @@ $(document).ready(function () {
                     number++;
                     wins++;
                     stopclock();
-                    
+                    reset();
 
 
 
-                } else if ($(this).attr("data-name") !== currentQuestion.correctAns) {
+
+                } else if ($(this).attr("data-name") !== currentQuestion.correctAns || gameStarted == false) {
                     console.log("incorrect");
                     $("#game-container").empty();
                     $("#button-container").empty();
-                    answerRow1.prepend("<h2 class=text-danger>WRONG</h2>");
+                    answerRow1.empty();
+                    answerRow1.append("<h2 class=text-danger>WRONG</h2>");
                     $("#game-container").append(answerRow1);
                     $("#game-container").append(answerRow2);
+                    $("#game-container").append(gifDiv);
                     $("#button-container").append(next);
                     number++;
                     loses++;
                     stopclock();
+                    reset();
                 }
             });
 
@@ -185,6 +197,17 @@ $(document).ready(function () {
                 $("#button-container").empty();
                 if (number === questionsArr.length) {
                     if (wins > loses) {
+                        var resultsDiv = $("<div class=col-md-12></div>");
+                        var resultsNum = $("<div class=col-md-6></div>");
+                        var winningGif = $("<div class=col-md-6></div>");
+                        resultsDiv.append($("<h2 class=text-success>You Win!</h2>"));
+                        resultsNum.append($("<h2>"+wins+"/10</h2>"));
+                        winningGif.append($("<img src=assets/images/win.gif>"));
+                        $("#game-container").append(resultsDiv);
+                        $("#game-container").append(resultsNum);
+                        $("#game-container").append(winningGif);
+
+
                         console.log("Winner Winner Chicken Dinner");
                     } else if (wins < loses) {
                         console.log("You Suck");
@@ -192,9 +215,9 @@ $(document).ready(function () {
                         console.log("Dam you barely got half right");
                     }
                 } else {
-                    reset();
+                    // number++
                     godzillaGame();
-                    gameStarted = false;
+                    clockFunc();
                 }
                 console.log(number)
             })
