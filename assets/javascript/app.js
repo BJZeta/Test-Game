@@ -2,7 +2,7 @@ $(document).ready(function () {
     $("#start-button").on("click", function () {
         godzillaGame();
         clockFunc();
-    })
+    });
     var number = 0;
     var wins = 0;
     var loses = 0;
@@ -19,7 +19,7 @@ $(document).ready(function () {
             answers: ["Anguirus", "King Ghidorah", "King Kong", "Mothra"],
             correctAns: "Anguirus",
             answerDesc: "In Godzilla Raids Again (1956), Godzilla would fight his very first opponent, Anguirus.",
-            gif: "assests/images/anguirus.gif"
+            gif: "assets/images/anguirus.gif"
         },
         {
             question: "Name a monster Godzilla fought that is NOT an alien",
@@ -54,7 +54,7 @@ $(document).ready(function () {
             answers: ["Biollante", "Rodan", "MechaGodzilla", "Baragon"],
             correctAns: "Biollante",
             answerDesc: "Biollante, from Godzilla Vs Biollante, is a plant-based monster that was born by scientists mutating plant cells with Godzilla cells.",
-            gif: "asstes/images/biollante.gif"
+            gif: "assets/images/biollante.gif"
         },
         {
             question: "True or False: In the first American Godzilla film, released in 1998, Godzilla is depicted WITHOUT his signature Atomic Breathe.",
@@ -78,7 +78,7 @@ $(document).ready(function () {
             gif: "assets/images/king.gif"
         }
 
-    ]
+    ];
 
     var clockHeading = $("<h2 id=clock-heading>");
     var gameStarted = false;
@@ -91,7 +91,10 @@ $(document).ready(function () {
             intervalId = setInterval(decrement, 1000);
         }
 
-    }
+    };
+    var resultsDiv = $("<div class=col-md-12></div>");
+    var resultsNum = $("<div class=col-md-6></div>");
+    var winningGif = $("<div class=col-md-6></div>");
 
 
     var decrement = function () {
@@ -111,8 +114,8 @@ $(document).ready(function () {
             loses++;
             stopclock();
 
-        }
-    }
+        };
+    };
 
     var stopclock = function () {
         gameStarted = false;
@@ -155,7 +158,6 @@ $(document).ready(function () {
             $("#button-container").prepend(choices);
             choices.on("click", function () {
                 if ($(this).attr("data-name") === currentQuestion.correctAns) {
-                    console.log("correct");
                     $("#game-container").empty();
                     $("#button-container").empty();
                     answerRow1.empty();
@@ -169,11 +171,7 @@ $(document).ready(function () {
                     stopclock();
                     reset();
 
-
-
-
                 } else if ($(this).attr("data-name") !== currentQuestion.correctAns || gameStarted == false) {
-                    console.log("incorrect");
                     $("#game-container").empty();
                     $("#button-container").empty();
                     answerRow1.empty();
@@ -189,26 +187,13 @@ $(document).ready(function () {
                 }
             });
 
-            // var next = $("<button>");
-            // next.text("Next Question");
 
             next.on("click", function () {
                 $("#game-container").empty();
                 $("#button-container").empty();
                 if (number === questionsArr.length) {
                     if (wins > loses) {
-                        var resultsDiv = $("<div class=col-md-12></div>");
-                        var resultsNum = $("<div class=col-md-6></div>");
-                        var winningGif = $("<div class=col-md-6></div>");
-                        resultsDiv.append($("<h2 class=text-success>You Win!</h2>"));
-                        resultsNum.append($("<h2>"+wins+"/10</h2>"));
-                        winningGif.append($("<img src=assets/images/win.gif>"));
-                        $("#game-container").append(resultsDiv);
-                        $("#game-container").append(resultsNum);
-                        $("#game-container").append(winningGif);
-
-
-                        console.log("Winner Winner Chicken Dinner");
+                        console.log("You win")
                     } else if (wins < loses) {
                         console.log("You Suck");
                     } else {
@@ -219,48 +204,20 @@ $(document).ready(function () {
                     godzillaGame();
                     clockFunc();
                 }
-                console.log(number)
             })
 
 
         }
+        // var winFun = function () {
+        //     resultsDiv.append($("<h2 class=text-success>You Win!</h2>"));
+        //     resultsNum.append($("<h2>" + wins + "/10</h2>"));
+        //     winningGif.append($("<img src=assets/images/win.gif>"));
+        //     $("#game-container").append(resultsDiv);
+        //     $("#game-container").append(resultsNum);
+        //     $("#game-container").append(winningGif);
+        // }
 
-
-
-        // console.log(questionsArr[0].question);
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    };
 
 
 });
